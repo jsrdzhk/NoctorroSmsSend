@@ -12,6 +12,24 @@ import java.util.Date;
 @Data
 @SuperBuilder
 public class TSms implements Comparable<TSms> {
+    private int index;
+    private int item;
+    private int count;
+    private int waitTime;
+    private int n1;
+    private int n2;
+    private int n3;
+    private int n4;
+    private int n5;
+    private String taskName;
+    private String timeE;
+    private String scode;
+    private String netflow;
+    private String s1;
+    private String s2;
+    private String s3;
+    private String s4;
+    private String s5;
     private int comPort;
     private String sendPhoneNumber;
     private String receivePhoneNumber;

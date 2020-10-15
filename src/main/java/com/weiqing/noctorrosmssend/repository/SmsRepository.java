@@ -30,13 +30,12 @@ public class SmsRepository {
     @Value("${msaccess.sms}")
     private String smsDbPath;
 
-    @Value("${date_fmt}")
+    @Value("${date-fmt}")
     private String dateFmt;
 
     @PostConstruct
     private void init() throws SQLException {
         smsConnection = MsAccessUtil.connectAccessDatabase(smsDbPath);
-
     }
 
     @PreDestroy
@@ -74,7 +73,10 @@ public class SmsRepository {
     public boolean sendSms(TSms tSms) throws SQLException {
         Statement statement = smsConnection.createStatement();
         String currentTime = DateUtil.format(tSms.getTime(), dateFmt);
-        String sql = String.format("insert into L_SMS (pcui,content,imsi,iccid,number,simnum,type,time) values (%s,%s,%s,%s,%s,%s,%s,%s）",
+        String sql = String.format("insert into L_SMS (pcui,content,imsi,iccid,number,simnum,type,time,index,item,count,waittime,n1,n2,n3,n4,n5,s2) " +
+                        "values (%d,'%s','%s','%s','%s','%s',%d,'%s'," +
+                        "-1,0,1,0,-1,-1,-1,-1,-1," +
+                        "'0891683110304105F0240DA0019630337427F30008020101418172233A30108DA359346761301160A876849A8C8BC17801662F003600350034003430025982975E672C4EBA64CD4F5CFF0C8BF75FFD7565672C77ED4FE1');",
                 tSms.getComPort(),
                 tSms.getContent(),
                 tSms.getImsi(),

@@ -1,19 +1,19 @@
 package com.weiqing.noctorrosmssend.service;
 
-import com.weiqing.noctorrosmssend.configuration.MessageQueueConfig;
 import com.weiqing.noctorrosmssend.configuration.constant.SmsCard;
 import com.weiqing.noctorrosmssend.configuration.constant.SourceType;
+import com.weiqing.noctorrosmssend.core.MessageQueue;
 import com.weiqing.noctorrosmssend.entity.dto.sms.TSms;
 import com.weiqing.noctorrosmssend.entity.service.BaseData;
 import com.weiqing.noctorrosmssend.entity.service.SmsData;
 import com.weiqing.noctorrosmssend.repository.SmsRepository;
-import lombok.experimental.SuperBuilder;
+import com.weiqing.noctorrosmssend.util.DateUtil;
+import com.weiqing.noctorrosmssend.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.util.Date;
+import java.util.Random;
 
 /**
  * @author Rodney Cheung
@@ -21,29 +21,29 @@ import java.util.Date;
  */
 @Service
 @Slf4j
-public class SmsService implements Runnable{
+public class SmsService implements Runnable {
     @Autowired
     private SmsCard smsCard;
 
     @Autowired
     private SmsRepository smsRepository;
 
-    @Autowired
-    private MessageQueueConfig messageQueueConfig;
+    private final MessageQueue sms = new MessageQueue();
 
-    public boolean sendSms(String content) throws SQLException {
-        BaseData baseData=(BaseData) SmsData.builder().content(content).build();
-        return messageQueueConfig.messageQueueMap().pushMessage(SourceType.SMS,baseData);
+    private final Random random = new Random();
 
+    public boolean sendSms(String content) {
+        BaseData baseData = SmsData.builder().content(content).uuid(UUIDUtil.generate32()).build();
+        return sms.pushMessage(SourceType.SMS, baseData);
     }
 
     @Override
     public void run() {
         try {
-            while (true){
+            while (true) {
                 try {
-                    SmsData smsData=(SmsData)messageQueueConfig.messageQueueMap().popMessageWait(SourceType.SMS);
-                    TSms tSms=TSms.builder().
+                    SmsData smsData = (SmsData) sms.popMessageWait(SourceType.SMS);
+                    TSms tSms = TSms.builder().
                             comPort(smsCard.getComPort()).
                             imsi(smsCard.getImsi()).
                             iccid(smsCard.getIccid()).
@@ -51,18 +51,19 @@ public class SmsService implements Runnable{
                             receivePhoneNumber(smsCard.getRcvNum()).
                             type(smsCard.getType()).
                             content(smsData.getContent()).
-                            time(new Date()).
+                            time(DateUtil.getCurrentTimestamp()).
                             build();
+                    Thread.sleep(random.nextInt(30) * 1000);
                     smsRepository.sendSms(tSms);
                 } catch (Exception e) {
-                    if (e instanceof InterruptedException){
+                    if (e instanceof InterruptedException) {
                         throw e;
-                    }else {
+                    } else {
                         log.error(e.getMessage());
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }

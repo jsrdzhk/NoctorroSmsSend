@@ -14,23 +14,18 @@ import org.springframework.context.ApplicationListener;
 @SpringBootApplication
 public class NoctorroSmsSendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication application=new SpringApplication(NoctorroSmsSendApplication.class);
-		application.addListeners(new AppStartListener());
-		application.run(args);
-	}
+    public static void main(String[] args) {
+        SpringApplication application = new SpringApplication(NoctorroSmsSendApplication.class);
+        application.addListeners(new AppStartListener());
+        application.run(args);
+    }
 
 }
 
 class AppStartListener implements ApplicationListener<ApplicationReadyEvent> {
-	/**
-	 * spring boot 加载完成后的回调，这里初始化系统数据。
-	 *
-	 * @param event the event to respond to
-	 */
-	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
-		SpringContextUtils.setApplicationContext(event.getApplicationContext());
-		SpringContextUtils.getBean(InitTask.class).startThread();
-	}
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        SpringContextUtils.setApplicationContext(event.getApplicationContext());
+        SpringContextUtils.getBean(InitTask.class).startThread();
+    }
 }

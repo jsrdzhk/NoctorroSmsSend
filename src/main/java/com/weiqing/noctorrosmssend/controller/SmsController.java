@@ -1,14 +1,11 @@
 package com.weiqing.noctorrosmssend.controller;
 
-import com.weiqing.noctorrosmssend.entity.api.request.SmsUpload;
 import com.weiqing.noctorrosmssend.entity.api.response.ResponseMessage;
 import com.weiqing.noctorrosmssend.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.SQLException;
 
 /**
  * @author Rodney Cheung
@@ -21,18 +18,12 @@ public class SmsController {
     private SmsService smsService;
 
     @PostMapping("/modem_pool/send_sms")
-    public ResponseMessage sendSms(String content){
+    public ResponseMessage sendSms(String content) {
         ResponseMessage responseMessage = new ResponseMessage();
-        try {
-            if (smsService.sendSms(content)){
-                responseMessage.setCode(0);
-                responseMessage.setMessage("success");
-            }else {
-                responseMessage.setCode(-1);
-                responseMessage.setMessage("failed");
-            }
-        } catch (SQLException throwables) {
-            log.error(throwables.getMessage());
+        if (smsService.sendSms(content)) {
+            responseMessage.setCode(0);
+            responseMessage.setMessage("success");
+        } else {
             responseMessage.setCode(-1);
             responseMessage.setMessage("failed");
         }

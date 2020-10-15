@@ -16,11 +16,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class InitTask {
     public void startThread() {
-        setAnalyzerThread("main-send-sms",1, SpringContextUtils.getBean(SmsService.class));
+        setAnalyzerThread("main-send-sms", 1, SpringContextUtils.getBean(SmsService.class));
     }
 
     private void setAnalyzerThread(String threadName, int poolSize, Runnable command) {
-        //创建线程池
         ThreadPoolExecutor thread = ThreadManager.generateThreadPoolProxy(poolSize, poolSize + 10, 1000, threadName);
         for (int i = 0; i < poolSize; i++) {
             thread.execute(command);

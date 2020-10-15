@@ -1,4 +1,4 @@
-sms_send:
+sms-send:
   comPort: 17
   imsi: 460016731650621
   iccid: 98681091081188857476
@@ -6,7 +6,10 @@ sms_send:
   sendNum: 1069033347723
   type: 79
 
-date_fmt: yyyy-MM-dd hh:mm:ss
+server:
+  port: 8089
+
+date-fmt: yyyy-MM-dd hh:mm:ss
 
 msaccess:
   sms: c:/fengrui/Data/SMS.mdb

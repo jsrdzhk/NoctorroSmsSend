@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * @author Rodney Cheung
  * @date 10/15/2020 11:00 AM
  */
-@ConfigurationProperties(prefix = "sms_send")
+@ConfigurationProperties(prefix = "sms-send")
 @Data
 @Component
 public class SmsCard {

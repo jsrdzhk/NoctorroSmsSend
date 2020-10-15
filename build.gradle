@@ -30,6 +30,8 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+	// https://mvnrepository.com/artifact/net.sf.ucanaccess/ucanaccess
+	compile group: 'net.sf.ucanaccess', name: 'ucanaccess', version: '5.0.0'
 
 }
 

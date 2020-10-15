@@ -18,9 +18,9 @@ public class SmsController {
     private SmsService smsService;
 
     @PostMapping("/modem_pool/send_sms")
-    public ResponseMessage sendSms(String content) {
+    public ResponseMessage sendSms(String content, String phoneNum) {
         ResponseMessage responseMessage = new ResponseMessage();
-        if (smsService.sendSms(content)) {
+        if (smsService.sendSms(content, phoneNum)) {
             responseMessage.setCode(0);
             responseMessage.setMessage("success");
         } else {

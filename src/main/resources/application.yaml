@@ -3,13 +3,12 @@ sms-send:
   imsi: 460016731650621
   iccid: 98681091081188857476
   rcvNum: 18616739315
-  sendNum: 1069033347723
   type: 79
 
 server:
   port: 8089
 
-date-fmt: yyyy-MM-dd hh:mm:ss
+date-fmt: yyyy-MM-dd HH:mm:ss
 
 msaccess:
   sms: c:/fengrui/Data/SMS.mdb

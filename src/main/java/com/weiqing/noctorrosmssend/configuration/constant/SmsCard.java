@@ -16,6 +16,5 @@ public class SmsCard {
     private String imsi;
     private String iccid;
     private String rcvNum;
-    private String sendNum;
     private int type;
 }

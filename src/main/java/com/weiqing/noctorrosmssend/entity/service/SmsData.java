@@ -13,4 +13,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class SmsData extends BaseData {
     String content;
+    String phoneNum;
 }

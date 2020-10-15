@@ -32,8 +32,8 @@ public class SmsService implements Runnable {
 
     private final Random random = new Random();
 
-    public boolean sendSms(String content) {
-        BaseData baseData = SmsData.builder().content(content).uuid(UUIDUtil.generate32()).build();
+    public boolean sendSms(String content, String phoneNum) {
+        BaseData baseData = SmsData.builder().content(content).phoneNum(phoneNum).uuid(UUIDUtil.generate32()).build();
         return sms.pushMessage(SourceType.SMS, baseData);
     }
 
@@ -47,7 +47,7 @@ public class SmsService implements Runnable {
                             comPort(smsCard.getComPort()).
                             imsi(smsCard.getImsi()).
                             iccid(smsCard.getIccid()).
-                            sendPhoneNumber(smsCard.getSendNum()).
+                            sendPhoneNumber(smsData.getPhoneNum()).
                             receivePhoneNumber(smsCard.getRcvNum()).
                             type(smsCard.getType()).
                             content(smsData.getContent()).

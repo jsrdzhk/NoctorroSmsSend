@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +29,9 @@ public class SmsRepository {
 
     @Value("${msaccess.sms}")
     private String smsDbPath;
+
+    @Value("${date_fmt}")
+    private String dateFmt;
 
     @PostConstruct
     private void init() throws SQLException {
@@ -59,7 +61,7 @@ public class SmsRepository {
                     build();
             String timeStr = resultSet.getString("time");
             try {
-                Date dateTime = DateUtil.parse(timeStr, "yyyy-MM-dd hh:mm:ss");
+                Date dateTime = DateUtil.parse(timeStr, dateFmt);
                 tSms.setTime(dateTime);
             } catch (ParseException e) {
                 log.error(e.getMessage());
@@ -69,16 +71,18 @@ public class SmsRepository {
         return tSmsList;
     }
 
-    private boolean sendSms(TSms tSms) throws SQLException {
-        Statement statement=smsConnection.createStatement();
-        String sql=String.format("insert into L_SMS (pcui,content,imsi,iccid,number,simnum,type) values (%s,%s,%s,%s,%s,%s,%s）",
+    public boolean sendSms(TSms tSms) throws SQLException {
+        Statement statement = smsConnection.createStatement();
+        String currentTime = DateUtil.format(tSms.getTime(), dateFmt);
+        String sql = String.format("insert into L_SMS (pcui,content,imsi,iccid,number,simnum,type,time) values (%s,%s,%s,%s,%s,%s,%s,%s）",
                 tSms.getComPort(),
                 tSms.getContent(),
                 tSms.getImsi(),
                 tSms.getIccid(),
                 tSms.getSendPhoneNumber(),
                 tSms.getReceivePhoneNumber(),
-                tSms.getType());
+                tSms.getType(),
+                currentTime);
         return statement.execute(sql);
     }
 }
